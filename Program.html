@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Product Boxes</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f7f7f7;
+            flex-direction: column;
+        }
+
+        .container {
+            width: 400px;
+            background-color: white;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+
+        .box {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 20px;
+            padding: 10px;
+            background-color: #f1f1f1;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            overflow: hidden;
+        }
+
+        .box:hover {
+            background-color: #e0ffe0;
+        }
+
+        .box-header {
+            font-size: 16px;
+            font-weight: bold;
+            color: #333;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .box-header span {
+            color: #4CAF50;
+            font-weight: normal;
+        }
+
+        .box-body {
+            margin-top: 10px;
+            display: none;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .box.open .box-body {
+            display: flex;
+        }
+
+        .dropdown {
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .quantity-selector {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .quantity-selector input {
+            width: 50px;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        .total-price {
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+            margin-top: 20px;
+        }
+
+        .box + .box {
+            margin-top: 10px;
+        }
+
+        /* Color options for each box */
+        .box.red {
+            background-color: #ffcccc;
+        }
+
+        .box.green {
+            background-color: #ccffcc;
+        }
+
+        .box.blue {
+            background-color: #ccccff;
+        }
+
+        /* Apply a minimum height to the box when expanded */
+        .box.open {
+            min-height: 150px; /* Adjust as per content */
+        }
+
+        .box.open .box-body {
+            display: flex;
+        }
+
+        /* Style to show the dropdown open state */
+        .dropdown.open {
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Top Box -->
+        <div class="box" id="box1">
+            <div class="box-header">
+                <span>1 Pair</span>
+                <span class="price">DKK 195.00</span>
+            </div>
+            <div class="box-body">
+                <div class="quantity-selector">
+                    <label for="size1">Size:</label>
+                    <select id="size1" class="dropdown">
+                        <option value="S">S</option>
+                        <option value="M">M</option>
+                        <option value="L">L</option>
+                    </select>
+
+                    <label for="color1">Colour:</label>
+                    <select id="color1" class="dropdown">
+                        <option value="Red">Red</option>
+                        <option value="Green">Green</option>
+                        <option value="Blue">Blue</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Middle Box -->
+        <div class="box" id="box2">
+            <div class="box-header">
+                <span>2 Pair</span>
+                <span class="price">DKK 345.00</span>
+            </div>
+            <div class="box-body">
+                <div class="quantity-selector">
+                    <label for="size2">Size:</label>
+                    <select id="size2" class="dropdown">
+                        <option value="S">S</option>
+                        <option value="M">M</option>
+                        <option value="L">L</option>
+                    </select>
+
+                    <label for="color2">Colour:</label>
+                    <select id="color2" class="dropdown">
+                        <option value="Red">Red</option>
+                        <option value="Green">Green</option>
+                        <option value="Blue">Blue</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Box -->
+        <div class="box" id="box3">
+            <div class="box-header">
+                <span>3 Pair</span>
+                <span class="price">DKK 528.00</span>
+            </div>
+            <div class="box-body">
+                <div class="quantity-selector">
+                    <label for="size3">Size:</label>
+                    <select id="size3" class="dropdown">
+                        <option value="S">S</option>
+                        <option value="M">M</option>
+                        <option value="L">L</option>
+                    </select>
+
+                    <label for="color3">Colour:</label>
+                    <select id="color3" class="dropdown">
+                        <option value="Red">Red</option>
+                        <option value="Green">Green</option>
+                        <option value="Blue">Blue</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="total-price">Total: DKK <span id="totalPrice">1068.00</span></div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Prices for the items
+            const priceFor1Pair = 195;
+            const priceFor2Pair = 345;
+            const priceFor3Pair = 528;
+
+            // Get references to the boxes and dropdown elements
+            const box1 = document.getElementById('box1');
+            const box2 = document.getElementById('box2');
+            const box3 = document.getElementById('box3');
+
+            const size1 = document.getElementById('size1');
+            const size2 = document.getElementById('size2');
+            const size3 = document.getElementById('size3');
+
+            const color1 = document.getElementById('color1');
+            const color2 = document.getElementById('color2');
+            const color3 = document.getElementById('color3');
+
+            const totalPriceElem = document.getElementById('totalPrice');
+
+            // Function to calculate total price
+            function calculateTotal() {
+                let total = 0;
+
+                // Add the price for each box if it's open (clicked)
+                if (box1.classList.contains('open')) total += priceFor1Pair;
+                if (box2.classList.contains('open')) total += priceFor2Pair;
+                if (box3.classList.contains('open')) total += priceFor3Pair;
+
+                // Example logic for larger sizes that increase the price
+                if (size1 && (size1.value === 'M' || size1.value === 'L')) total += 20;
+                if (size2 && (size2.value === 'M' || size2.value === 'L')) total += 20;
+                if (size3 && (size3.value === 'M' || size3.value === 'L')) total += 20;
+
+                // Update the total price display
+                totalPriceElem.textContent = total.toFixed(2);
+            }
+
+            // Function to change the background color based on the selected color
+            function changeBoxColor(box, color) {
+                box.classList.remove('red', 'green', 'blue');
+                if (color === 'Red') {
+                    box.classList.add('red');
+                } else if (color === 'Green') {
+                    box.classList.add('green');
+                } else if (color === 'Blue') {
+                    box.classList.add('blue');
+                }
+            }
+
+            // Function to update size and color options dynamically
+            function updateOptions() {
+                // Dynamically update color options based on selected size
+                const selectedSize1 = size1.value;
+                const selectedSize2 = size2.value;
+                const selectedSize3 = size3.value;
+
+                const availableColors1 = selectedSize1 === 'L' ? ['Red', 'Green', 'Blue'] : ['Green', 'Blue'];
+                const availableColors2 = selectedSize2 === 'L' ? ['Red', 'Green', 'Blue'] : ['Green', 'Blue'];
+                const availableColors3 = selectedSize3 === 'L' ? ['Red', 'Green', 'Blue'] : ['Green', 'Blue'];
+
+                color1.innerHTML = availableColors1.map(color => `<option value="${color}">${color}</option>`).join('');
+                color2.innerHTML = availableColors2.map(color => `<option value="${color}">${color}</option>`).join('');
+                color3.innerHTML = availableColors3.map(color => `<option value="${color}">${color}</option>`).join('');
+            }
+
+            // Add event listeners to handle size and color selection
+            size1.addEventListener('change', () => {
+                updateOptions();
+                changeBoxColor(box1, color1.value);
+                calculateTotal();
+            });
+            color1.addEventListener('change', () => {
+                changeBoxColor(box1, color1.value);
+                calculateTotal();
+            });
+
+            size2.addEventListener('change', () => {
+                updateOptions();
+                changeBoxColor(box2, color2.value);
+                calculateTotal();
+            });
+            color2.addEventListener('change', () => {
+                changeBoxColor(box2, color2.value);
+                calculateTotal();
+            });
+
+            size3.addEventListener('change', () => {
+                updateOptions();
+                changeBoxColor(box3, color3.value);
+                calculateTotal();
+            });
+            color3.addEventListener('change', () => {
+                changeBoxColor(box3, color3.value);
+                calculateTotal();
+            });
+
+            // Box click event to toggle visibility (and prevent collapsing on dropdown)
+            box1.addEventListener('click', (event) => {
+                if (!event.target.closest('.dropdown')) {
+                    box1.classList.toggle('open');
+                    calculateTotal();
+                }
+            });
+
+            box2.addEventListener('click', (event) => {
+                if (!event.target.closest('.dropdown')) {
+                    box2.classList.toggle('open');
+                    calculateTotal();
+                }
+            });
+
+            box3.addEventListener('click', (event) => {
+                if (!event.target.closest('.dropdown')) {
+                    box3.classList.toggle('open');
+                    calculateTotal();
+                }
+            });
+
+            // Initial color setup
+            changeBoxColor(box1, color1.value);
+            changeBoxColor(box2, color2.value);
+            changeBoxColor(box3, color3.value);
+
+            updateOptions();
+        });
+    </script>
+
+</body>
+</html>
